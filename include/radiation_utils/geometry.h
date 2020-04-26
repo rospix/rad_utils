@@ -53,7 +53,7 @@ public:
   const std::vector<Eigen::Vector3d> vertices();
 
 public:
-  boost::optional<Eigen::Vector3d> intersectionRay(Ray r, double epsilon = 1e-16);
+  const boost::optional<Eigen::Vector3d> intersectionRay(Ray r, double epsilon = 1e-16);
 };
 //}
 
@@ -82,6 +82,8 @@ public:
 
   const std::vector<Eigen::Vector3d> vertices();
   const std::vector<Triangle>        triangles();
+
+  const boost::optional<Eigen::Vector3d> intersectionRay(Ray r, double epsilon = 1e-16);
 };
 //}
 
@@ -112,10 +114,10 @@ private:
 
 public:
   const std::vector<Eigen::Vector3d> vertices();
+  const Eigen::Vector3d              center();
+  const Rectangle                    getRectangle(int face_idx);
 
-  const Eigen::Vector3d center();
-
-  const Rectangle getRectangle(int face_idx);
+  const std::vector<Eigen::Vector3d> intersectionRay(Ray r, double epsilon = 1e-16);
 };
 //}
 
@@ -192,12 +194,25 @@ public:
 };
 //}
 
-/* static Quaternion conversions //{ */
+/* class geometry (static utility functions) //{ */
 class geometry {
 public:
+  /* Quaternion conversions //{ */
   static Eigen::Quaterniond quaternionFromEuler(double x, double y, double z);
   static Eigen::Quaterniond quaternionFromEuler(Eigen::Vector3d euler);
+  //}
+
+  /* angle and solid angle tools //{ */
+  static double haversin(double angle);
+  static double invHaversin(double angle);
+  static double triangleArea(double a, double b, double c);
+  static double vectorAngle(Eigen::Vector3d v1, Eigen::Vector3d v2);
+  static double solidAngle(double a, double b, double c);
+  static double sphericalTriangleArea(Eigen::Vector3d a, Eigen::Vector3d b, Eigen::Vector3d c);
+  static double rectSolidAngle(Rectangle r, Eigen::Vector3d center);
+  //}
 };
+
 //}
 
 #endif

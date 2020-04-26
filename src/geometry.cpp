@@ -107,7 +107,7 @@ const std::vector<Eigen::Vector3d> Triangle::vertices() {
 //}
 
 /* intersectionRay //{ */
-boost::optional<Eigen::Vector3d> Triangle::intersectionRay(Ray r, double epsilon) {
+const boost::optional<Eigen::Vector3d> Triangle::intersectionRay(Ray r, double epsilon) {
   // The Möller–Trumbore algorithm
   // https://en.wikipedia.org/wiki/M%C3%B6ller%E2%80%93Trumbore_intersection_algorithm
   Eigen::Vector3d v1  = point2 - point1;
@@ -211,6 +211,18 @@ const std::vector<Triangle> Rectangle::triangles() {
   triangles.push_back(t1);
   triangles.push_back(t2);
   return triangles;
+}
+//}
+
+/* intersectionRay //{ */
+const boost::optional<Eigen::Vector3d> Rectangle::intersectionRay(Ray r, double epsilon) {
+  Triangle t1     = triangles()[0];
+  Triangle t2     = triangles()[1];
+  auto     result = t1.intersectionRay(r, epsilon);
+  if (result != boost::none) {
+    return result;
+  }
+  return t2.intersectionRay(r, epsilon);
 }
 //}
 
@@ -334,6 +346,20 @@ const Eigen::Vector3d Cuboid::center() {
     point_sum += points[i];
   }
   return point_sum / 8.0;
+}
+//}
+
+/* intersectionRay //{ */
+const std::vector<Eigen::Vector3d> Cuboid::intersectionRay(Ray r, double epsilon) {
+  std::vector<Eigen::Vector3d> ret;
+  for (int i = 0; i < 6; i++) {
+    Rectangle side           = getRectangle(i);
+    auto      side_intersect = side.intersectionRay(r, epsilon);
+    if(side_intersect != boost::none){
+      ret.push_back(side_intersect.get());
+    }
+  }
+  return ret;
 }
 //}
 
@@ -477,6 +503,78 @@ const Ellipse Cone::getCap() {
   return e;
 }
 
+//}
+
+//}
+
+/* angle and solid angle tools //{ */
+
+/* haversin //{ */
+double geometry::haversin(double angle) {
+  return (1.0 - std::cos(angle)) / 2.0;
+}
+//}
+
+/* invHaversin //{ */
+double geometry::invHaversin(double angle) {
+  return 2.0 * std::asin(std::sqrt(angle));
+}
+//}
+
+/* triangleArea //{ */
+double geometry::triangleArea(double a, double b, double c) {
+  double s = (a + b + c) / 2.0;
+  return std::sqrt(s * (s - a) * (s - b) * (s - c));
+}
+//}
+
+/* vectorAngle //{ */
+double geometry::vectorAngle(Eigen::Vector3d v1, Eigen::Vector3d v2) {
+  return acos(v1.dot(v2) / (v1.norm() * v2.norm()));
+}
+//}
+
+/* solidAngle //{ */
+double geometry::solidAngle(double a, double b, double c) {
+  return invHaversin((haversin(c) - haversin(a - b)) / (std::sin(a) * std::sin(b)));
+}
+//}
+
+/* sphericalTriangleArea //{ */
+double geometry::sphericalTriangleArea(Eigen::Vector3d a, Eigen::Vector3d b, Eigen::Vector3d c) {
+  double ab = vectorAngle(a, b);
+  double bc = vectorAngle(b, c);
+  double ca = vectorAngle(c, a);
+
+  if (ab < 1e-3 and bc < 1e-3 and ca < 1e-3) {
+    return triangleArea(ab, bc, ca);
+  }
+
+  double A = solidAngle(ca, ab, bc);
+  double B = solidAngle(ab, bc, ca);
+  double C = solidAngle(bc, ca, ab);
+
+  return A + B + C - M_PI;
+}
+//}
+
+/* rectSolidAngle //{ */
+double geometry::rectSolidAngle(Rectangle r, Eigen::Vector3d center) {
+  Eigen::Vector3d a = r.a() - center;
+  Eigen::Vector3d b = r.b() - center;
+  Eigen::Vector3d c = r.c() - center;
+  Eigen::Vector3d d = r.d() - center;
+
+  a.normalize();
+  b.normalize();
+  c.normalize();
+  d.normalize();
+
+  double t1 = sphericalTriangleArea(a, b, c);
+  double t2 = sphericalTriangleArea(c, d, a);
+
+  return t1 + t2;
+}
 //}
 
 //}

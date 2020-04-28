@@ -53,7 +53,7 @@ public:
   const std::vector<Eigen::Vector3d> vertices();
 
 public:
-  const boost::optional<Eigen::Vector3d> intersectionRay(Ray r, double epsilon = 1e-16);
+  const boost::optional<Eigen::Vector3d> intersectionRay(Ray r, double epsilon = 1e-4);
 };
 //}
 
@@ -83,7 +83,7 @@ public:
   const std::vector<Eigen::Vector3d> vertices();
   const std::vector<Triangle>        triangles();
 
-  const boost::optional<Eigen::Vector3d> intersectionRay(Ray r, double epsilon = 1e-16);
+    const boost::optional<Eigen::Vector3d> intersectionRay(Ray r, double epsilon = 1e-4);
 };
 //}
 
@@ -117,7 +117,7 @@ public:
   const Eigen::Vector3d              center();
   const Rectangle                    getRectangle(int face_idx);
 
-  const std::vector<Eigen::Vector3d> intersectionRay(Ray r, double epsilon = 1e-16);
+  const std::vector<Eigen::Vector3d> intersectionRay(Ray r, double epsilon = 1e-4);
 };
 //}
 

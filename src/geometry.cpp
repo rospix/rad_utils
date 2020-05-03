@@ -226,6 +226,15 @@ const boost::optional<Eigen::Vector3d> Rectangle::intersectionRay(Ray r, double 
 }
 //}
 
+/* isFacing //{ */
+bool Rectangle::isFacing(Eigen::Vector3d point) {
+  Eigen::Vector3d towards_point = point - center();
+  double          dot_product   = towards_point.dot(normal());
+  return dot_product > 0;
+}
+
+//}
+
 //}
 
 /* Cuboid //{ */
@@ -355,7 +364,7 @@ const std::vector<Eigen::Vector3d> Cuboid::intersectionRay(Ray r, double epsilon
   for (int i = 0; i < 6; i++) {
     Rectangle side           = getRectangle(i);
     auto      side_intersect = side.intersectionRay(r, epsilon);
-    if(side_intersect != boost::none){
+    if (side_intersect != boost::none) {
       ret.push_back(side_intersect.get());
     }
   }

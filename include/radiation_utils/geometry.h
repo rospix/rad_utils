@@ -83,7 +83,9 @@ public:
   const std::vector<Eigen::Vector3d> vertices();
   const std::vector<Triangle>        triangles();
 
-    const boost::optional<Eigen::Vector3d> intersectionRay(Ray r, double epsilon = 1e-4);
+  const boost::optional<Eigen::Vector3d> intersectionRay(Ray r, double epsilon = 1e-4);
+
+  bool isFacing(Eigen::Vector3d point);
 };
 //}
 

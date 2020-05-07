@@ -5,6 +5,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall")
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
+  roslib
   std_msgs
   dynamic_reconfigure
 )
@@ -30,8 +31,8 @@ generate_dynamic_reconfigure_options(
 catkin_package(
   INCLUDE_DIRS include
   DEPENDS Eigen
-  CATKIN_DEPENDS roscpp std_msgs
-  LIBRARIES geometry batch_visualizer
+  CATKIN_DEPENDS roscpp roslib std_msgs
+  LIBRARIES geometry physics batch_visualizer
 )
 
 ###########
@@ -45,6 +46,12 @@ include_directories(
 
 add_library(geometry src/geometry.cpp)
 target_link_libraries(geometry
+  ${catkin_LIBRARIES}
+  ${Eigen_LIBRARIES}
+)
+
+add_library(physics src/physics.cpp)
+target_link_libraries(physics
   ${catkin_LIBRARIES}
   ${Eigen_LIBRARIES}
 )

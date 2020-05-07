@@ -1,5 +1,3 @@
-#pragma once
-
 #ifndef RADIATION_GEOMETRY_H
 #define RADIATION_GEOMETRY_H
 

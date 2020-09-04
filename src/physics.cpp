@@ -6,8 +6,10 @@
 #include <radiation_utils/physics.h>
 #include <iostream>
 
-/* loadNistTable //{ */
+/* loadNistTable() //{ */
+
 Table loadNistTable(std::string material) {
+
   Table             table;
   std::stringstream ss;
 
@@ -55,25 +57,34 @@ Table loadNistTable(std::string material) {
 }
 //}
 
-/* interpolateAttenuation //{ */
+/* interpolateAttenuation() //{ */
+
 double interpolateAttenuation(Table table, AttenuationType type, double photon_energy) {
+
   // iterate through table until we hit line with the correct energy
+
   int index = 1;
+
   for (unsigned int i = 1; i < table.size(); i++) {
     if (table[i][0] > photon_energy) {
       index = (int)i;
       break;
     }
   }
+
   double energy_range      = table[index][0] - table[index - 1][0];
   double attenuation_range = table[index][type] - table[index - 1][type];
   double energy_fraction   = (table[index][0] - photon_energy) / energy_range;
+
   return table[index][type] - (attenuation_range * energy_fraction);
 }
+
 //}
 
-/* calculateMassAttCoeff //{ */
+/* calculateMassAttCoeff() //{ */
+
 double calculateMassAttCoeff(double photon_energy, std::string material, AttenuationType type) {
+
   try {
     Table table = loadNistTable(material);
     return interpolateAttenuation(table, type, photon_energy);
@@ -82,11 +93,15 @@ double calculateMassAttCoeff(double photon_energy, std::string material, Attenua
     ROS_ERROR("[Radiation Data Utils]: NIST table not found for material %s!", material.c_str());
     return 0.0;
   }
+
 }
+
 //}
 
-/* getMaterialDensity //{ */
+/* getMaterialDensity() //{ */
+
 double getMaterialDensity(std::string material) {
+
   try {
     Table table = loadNistTable(material);
     return table[0][3];
@@ -95,11 +110,35 @@ double getMaterialDensity(std::string material) {
     ROS_ERROR("[Radiation Data Utils]: NIST table not found or improperly formateed for material %s!", material.c_str());
     return 0.0;
   }
+
 }
+
 //}
 
-/* calculateAbsorptionProb //{ */
+/* calculateAbsorptionProb() //{ */
+
 double calculateAbsorptionProb(double track_length, double attenuation_coeff, double material_density) {
+
   return 1.0 - std::exp(-attenuation_coeff * track_length * 100 * material_density);  // multiply by 100, because other constants were measured for input in cm
+
 }
+
+//}
+
+/* conversions:: //{ */
+
+namespace conversions {
+
+  double energyJtoeV(const double J) {
+
+    return 6.242e18 * J;
+  }
+
+  double energyeVtoJ(const double eV) {
+
+    return eV / 6.242e18;
+  }
+
+}
+
 //}

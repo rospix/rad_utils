@@ -7,6 +7,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   roslib
   std_msgs
+  rad_msgs
   mrs_lib
 )
 
@@ -23,7 +24,7 @@ set(Eigen_LIBRARIES ${Eigen_LIBRARIES})
 catkin_package(
   INCLUDE_DIRS include
   DEPENDS Eigen
-  CATKIN_DEPENDS roscpp roslib std_msgs mrs_lib
+  CATKIN_DEPENDS roscpp roslib std_msgs rad_msgs mrs_lib
   LIBRARIES physics marching_cubes
 )
 
@@ -51,6 +52,12 @@ target_link_libraries(marching_cubes
 add_executable(visualization_test src/visualization_test.cpp)
 target_link_libraries(visualization_test
   marching_cubes
+  ${catkin_LIBRARIES}
+  ${Eigen_LIBRARIES}
+)
+
+add_executable(map_builder src/map_builder.cpp)
+target_link_libraries(map_builder
   ${catkin_LIBRARIES}
   ${Eigen_LIBRARIES}
 )

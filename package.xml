@@ -16,6 +16,7 @@
   <depend>roscpp</depend>
   <depend>roslib</depend>
   <depend>std_msgs</depend>
+  <depend>rad_msgs</depend>
   <depend>mrs_lib</depend>
 
 </package>

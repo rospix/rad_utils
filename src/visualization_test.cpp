@@ -375,7 +375,7 @@ int main(int argc, char** argv) {
     double b = (z1 - range_min) / (range_max - range_min);
 
     mrs_lib::Cone cone(origin, angle, height, direction);
-    bv.addCone(cone, r, g, b, 1.0, true, true, 12);
+    bv.addCone(cone, r, g, b, 1, true, true, 12);
     bv.addCone(cone, 0, 0, 0, 1, false, false, 12);
     bv.publish();
     ros::spinOnce();

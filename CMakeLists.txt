@@ -62,6 +62,19 @@ target_link_libraries(map_builder
   ${Eigen_LIBRARIES}
 )
 
+add_library(gridmap src/gridmap.cpp)
+target_link_libraries(gridmap
+  ${catkin_LIBRARIES}
+  ${Eigen_LIBRARIES}
+)
+
+add_executable(gridmap_test src/gridmap_test.cpp)
+target_link_libraries(gridmap_test
+  gridmap
+  ${catkin_LIBRARIES}
+  ${Eigen_LIBRARIES}
+)
+
 install(DIRECTORY include/${PROJECT_NAME}/
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
   PATTERN ".svn" EXCLUDE)

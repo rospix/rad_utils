@@ -2,7 +2,7 @@
 
   <name>radiation_utils</name>
   <version>0.0.1</version>
-  <description>This package contains the necessary computational geometry for simulating ionizing radiation for robotic applications.</description>
+  <description>Physics calculations for radiation source simulations and localization. Geometry and graphics has been merged into mrs_lib</description>
   <maintainer email="stibipet@fel.cvut.cz">Petr Štibinger</maintainer>
   <author>Petr Štibinger</author>
   <license>GPLv3</license>
@@ -16,8 +16,6 @@
   <depend>roscpp</depend>
   <depend>roslib</depend>
   <depend>std_msgs</depend>
-  <depend>dynamic_reconfigure</depend>
-
-  <exec_depend>message_runtime</exec_depend>
+  <depend>mrs_lib</depend>
 
 </package>

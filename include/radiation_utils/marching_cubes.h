@@ -1,15 +1,18 @@
+#ifndef MARCHING_CUBES_H
+#define MARCHING_CUBES_H
+
 #include <vector>
-#include <radiation_utils/geometry.h>
+#include <mrs_lib/geometry_utils.h>
 #include <eigen3/Eigen/Core>
 
 class MarchingCube {
 public:
   MarchingCube();
   ~MarchingCube();
-  MarchingCube(Cuboid cuboid, std::vector<int> active_vertices);
+  MarchingCube(mrs_lib::Cuboid cuboid, std::vector<int> active_vertices);
 
 private:
-  Cuboid           cuboid;
+  mrs_lib::Cuboid  cuboid;
   std::vector<int> active_vertices;
 
   int              getTriangulationIndex();
@@ -17,7 +20,7 @@ private:
   Eigen::Vector3d  getEdgePoint(int edge_index);
 
 public:
-  std::vector<Triangle> getTriangles();
+  std::vector<mrs_lib::Triangle> getTriangles();
 
   /* lookup_table //{ */
   int lookup_table[256][16] = {{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
@@ -278,3 +281,5 @@ public:
                                {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}};
   //}
 };
+
+#endif

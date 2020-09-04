@@ -7,7 +7,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   roslib
   std_msgs
-  dynamic_reconfigure
+  mrs_lib
 )
 
 ###########
@@ -17,22 +17,14 @@ find_package(Eigen3 REQUIRED)
 set(Eigen_INCLUDE_DIRS ${EIGEN3_INCLUDE_DIRS})
 set(Eigen_LIBRARIES ${Eigen_LIBRARIES})
 
-
-#########################
-## dynamic reconfigure ##
-#########################
-generate_dynamic_reconfigure_options(
-  cfg/batch_visualizer.cfg
-)
-
 ###################################
 ## catkin specific configuration ##
 ###################################
 catkin_package(
   INCLUDE_DIRS include
   DEPENDS Eigen
-  CATKIN_DEPENDS roscpp roslib std_msgs
-  LIBRARIES geometry physics batch_visualizer
+  CATKIN_DEPENDS roscpp roslib std_msgs mrs_lib
+  LIBRARIES physics marching_cubes
 )
 
 ###########
@@ -44,44 +36,24 @@ include_directories(
   ${Eigen_INCLUDE_DIRS}
 )
 
-add_library(geometry src/geometry.cpp)
-target_link_libraries(geometry
-  ${catkin_LIBRARIES}
-  ${Eigen_LIBRARIES}
-)
-
 add_library(physics src/physics.cpp)
 target_link_libraries(physics
   ${catkin_LIBRARIES}
   ${Eigen_LIBRARIES}
 )
 
-add_library(batch_visualizer src/batch_visualizer.cpp)
-target_link_libraries(batch_visualizer
-  geometry
-  ${catkin_LIBRARIES}
-  ${Eigen_LIBRARIES}
-)
-
 add_library(marching_cubes src/marching_cubes.cpp)
 target_link_libraries(marching_cubes
-  geometry
   ${catkin_LIBRARIES}
   ${Eigen_LIBRARIES}
 )
-## Add configure headers for dynamic reconfigure
-add_dependencies(batch_visualizer ${PROJECT_NAME}_gencfg)
 
-add_executable(${PROJECT_NAME}_test src/test.cpp)
-target_link_libraries(${PROJECT_NAME}_test  
-  geometry
-  batch_visualizer
+add_executable(visualization_test src/visualization_test.cpp)
+target_link_libraries(visualization_test
   marching_cubes
   ${catkin_LIBRARIES}
   ${Eigen_LIBRARIES}
 )
-
-# add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
 
 install(DIRECTORY include/${PROJECT_NAME}/
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}

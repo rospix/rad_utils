@@ -7,16 +7,14 @@ MarchingCube::MarchingCube() {
 MarchingCube::~MarchingCube() {
 }
 
-MarchingCube::MarchingCube(Cuboid cuboid, std::vector<int> active_vertices) {
+MarchingCube::MarchingCube(mrs_lib::Cuboid cuboid, std::vector<int> active_vertices) {
   this->cuboid          = cuboid;
   this->active_vertices = active_vertices;
 }
 
 int MarchingCube::getTriangulationIndex() {
   int index = 0;
-  /* std::cout << "Active vertices:\n"; */
   for (unsigned int i = 0; i < active_vertices.size(); i++) {
-    /* std::cout << active_vertices[i] << "\n"; */
     index += std::pow(2, active_vertices[i]);
   }
   return index;
@@ -63,15 +61,13 @@ Eigen::Vector3d MarchingCube::getEdgePoint(int edge_index) {
   }
 }
 
-std::vector<Triangle> MarchingCube::getTriangles() {
-  int index = getTriangulationIndex();
-  /* std::cout << "Triangulation index: " << index << "\n"; */
+std::vector<mrs_lib::Triangle> MarchingCube::getTriangles() {
+  int              index        = getTriangulationIndex();
   std::vector<int> edge_indices = lookupEdges(index);
-  /* std::cout << "Num of edge indices: " << edge_indices.size() << "\n"; */
 
-  std::vector<Triangle> triangles;
+  std::vector<mrs_lib::Triangle> triangles;
   for (unsigned int i = 0; i < edge_indices.size(); i += 3) {
-    Triangle t(getEdgePoint(edge_indices[i]), getEdgePoint(edge_indices[i + 1]), getEdgePoint(edge_indices[i + 2]));
+    mrs_lib::Triangle t(getEdgePoint(edge_indices[i]), getEdgePoint(edge_indices[i + 1]), getEdgePoint(edge_indices[i + 2]));
     triangles.push_back(t);
   }
   return triangles;

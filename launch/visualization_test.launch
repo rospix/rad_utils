@@ -1,0 +1,6 @@
+<launch>
+  
+  <node name="visualization_test" pkg="radiation_utils" type="visualization_test" output="screen" />
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find radiation_utils)/rviz/visualization_test.rviz" />
+
+</launch>

@@ -25,7 +25,7 @@ catkin_package(
   INCLUDE_DIRS include
   DEPENDS Eigen
   CATKIN_DEPENDS roscpp roslib std_msgs rad_msgs mrs_lib
-  LIBRARIES physics marching_cubes
+  LIBRARIES physics marching_cubes elist_parser
 )
 
 ###########
@@ -49,12 +49,25 @@ target_link_libraries(marching_cubes
   ${Eigen_LIBRARIES}
 )
 
+# add_library(elist_parser src/elist_parser.cpp)
+# target_link_libraries(elist_parser
+#   ${catkin_LIBRARIES}
+#   ${Eigen_LIBRARIES}
+# )
+
 add_executable(visualization_test src/visualization_test.cpp)
 target_link_libraries(visualization_test
   marching_cubes
   ${catkin_LIBRARIES}
   ${Eigen_LIBRARIES}
 )
+
+# add_executable(elist_parser_test src/elist_parser_test.cpp)
+# target_link_libraries(elist_parser_test
+#   elist_parser
+#   ${catkin_LIBRARIES}
+#   ${Eigen_LIBRARIES}
+# )
 
 add_executable(map_builder src/map_builder.cpp)
 target_link_libraries(map_builder

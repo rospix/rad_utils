@@ -25,7 +25,7 @@ catkin_package(
   INCLUDE_DIRS include
   DEPENDS Eigen
   CATKIN_DEPENDS roscpp roslib std_msgs rad_msgs mrs_lib
-  LIBRARIES physics marching_cubes elist_parser
+  LIBRARIES physics marching_cubes
 )
 
 ###########

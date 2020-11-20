@@ -7,7 +7,7 @@ MarchingCube::MarchingCube() {
 MarchingCube::~MarchingCube() {
 }
 
-MarchingCube::MarchingCube(mrs_lib::Cuboid cuboid, std::vector<int> active_vertices) {
+MarchingCube::MarchingCube(mrs_lib::geometry::Cuboid cuboid, std::vector<int> active_vertices) {
   this->cuboid          = cuboid;
   this->active_vertices = active_vertices;
 }
@@ -61,13 +61,13 @@ Eigen::Vector3d MarchingCube::getEdgePoint(int edge_index) {
   }
 }
 
-std::vector<mrs_lib::Triangle> MarchingCube::getTriangles() {
+std::vector<mrs_lib::geometry::Triangle> MarchingCube::getTriangles() {
   int              index        = getTriangulationIndex();
   std::vector<int> edge_indices = lookupEdges(index);
 
-  std::vector<mrs_lib::Triangle> triangles;
+  std::vector<mrs_lib::geometry::Triangle> triangles;
   for (unsigned int i = 0; i < edge_indices.size(); i += 3) {
-    mrs_lib::Triangle t(getEdgePoint(edge_indices[i]), getEdgePoint(edge_indices[i + 1]), getEdgePoint(edge_indices[i + 2]));
+    mrs_lib::geometry::Triangle t(getEdgePoint(edge_indices[i]), getEdgePoint(edge_indices[i + 1]), getEdgePoint(edge_indices[i + 2]));
     triangles.push_back(t);
   }
   return triangles;

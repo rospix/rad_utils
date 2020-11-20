@@ -1,5 +1,6 @@
-#include <mrs_lib/geometry_utils.h>
+#include <mrs_lib/geometry/shapes.h>
 #include <mrs_lib/batch_visualizer.h>
+#include <mrs_lib/attitude_converter.h>
 #include <radiation_utils/marching_cubes.h>
 
 #include <random>
@@ -57,7 +58,7 @@ int main(int argc, char** argv) {
     double          y2 = rand_dbl(generator);
     double          z2 = rand_dbl(generator);
     Eigen::Vector3d point2(x2, y2, z2);
-    mrs_lib::Ray    ray = mrs_lib::Ray::twopointCast(point1, point2);
+    mrs_lib::geometry::Ray    ray = mrs_lib::geometry::Ray::twopointCast(point1, point2);
     double          r   = ((x1 * x2) - range_min) / (range_max - range_min);
     double          g   = ((y1 * y2) - range_min) / (range_max - range_min);
     double          b   = ((z1 * z2) - range_min) / (range_max - range_min);
@@ -78,7 +79,7 @@ int main(int argc, char** argv) {
     double          b = rand_dbl(generator);
     double          c = rand_dbl(generator);
     Eigen::Vector3d point(a, b, c);
-    mrs_lib::Ray    ray = mrs_lib::Ray::twopointCast(Eigen::Vector3d::Zero(), point);
+    mrs_lib::geometry::Ray    ray = mrs_lib::geometry::Ray::twopointCast(Eigen::Vector3d::Zero(), point);
     double          r   = (i + 1) / 100.0;
     double          g   = 1 - r;
     bv.addRay(ray, r, g, 0, 1);
@@ -109,7 +110,7 @@ int main(int argc, char** argv) {
     double            r = x1 * x2 * x3;
     double            g = y1 * y2 * y3;
     double            b = z1 * z2 * z3;
-    mrs_lib::Triangle tri(point1, point2, point3);
+    mrs_lib::geometry::Triangle tri(point1, point2, point3);
     bv.addTriangle(tri, r, g, b, 1, true);
     bv.publish();
     ros::spinOnce();
@@ -138,7 +139,7 @@ int main(int argc, char** argv) {
     double            r = x1 * x2 * x3;
     double            g = y1 * y2 * y3;
     double            b = z1 * z2 * z3;
-    mrs_lib::Triangle tri(point1, point2, point3);
+    mrs_lib::geometry::Triangle tri(point1, point2, point3);
     bv.addTriangle(tri, r, g, b, 1, false);
     bv.publish();
     ros::spinOnce();
@@ -171,7 +172,7 @@ int main(int argc, char** argv) {
     double             r = x1 * x2;
     double             g = y1 * y2;
     double             b = z1 * z2;
-    mrs_lib::Rectangle rect(point1, point2, point3, point4);
+    mrs_lib::geometry::Rectangle rect(point1, point2, point3, point4);
     bv.addRectangle(rect, r, g, b, 1, true);   // draw colored faces
     bv.addRectangle(rect, 0, 0, 0, 1, false);  // draw outlines
     bv.publish();
@@ -195,12 +196,12 @@ int main(int argc, char** argv) {
     double             x2          = rand_dbl(generator);
     double             y2          = rand_dbl(generator);
     double             z2          = rand_dbl(generator);
-    Eigen::Quaterniond orientation = mrs_lib::quaternionFromEuler(x2, y2, z2);
+    Eigen::Quaterniond orientation = mrs_lib::AttitudeConverter(x2, y2, z2);
 
     double          r = (x1 - range_min) / (range_max - range_min);
     double          g = (y1 - range_min) / (range_max - range_min);
     double          b = (z1 - range_min) / (range_max - range_min);
-    mrs_lib::Cuboid cub(center, scale, orientation);
+    mrs_lib::geometry::Cuboid cub(center, scale, orientation);
 
     bv.addCuboid(cub, r, g, b, 1, true);   // draw colored faces
     bv.addCuboid(cub, 0, 0, 0, 1, false);  // draw outlines
@@ -245,7 +246,7 @@ int main(int argc, char** argv) {
   //}
 
   /* TRIANGULATE MESH //{ */
-  std::vector<mrs_lib::Triangle> triangles;
+  std::vector<mrs_lib::geometry::Triangle> triangles;
   ROS_INFO("[%s]: Marching cubes test...", ros::this_node::getName().c_str());
   for (int i = range_min; (i < range_max - cube_size && ros::ok()); i += cube_size) {
     for (int j = range_min; (j < range_max - cube_size && ros::ok()); j += cube_size) {
@@ -259,7 +260,7 @@ int main(int argc, char** argv) {
         for (unsigned int i = 0; i < all_points.size(); i++) {
           bv.addPoint(all_points[i], all_values[i], all_values[i], all_values[i], 1.0);
         }
-        mrs_lib::Cuboid c(center, size, orientation);
+        mrs_lib::geometry::Cuboid c(center, size, orientation);
         bv.addCuboid(c, 0.9, 0.9, 0.8, 1.0, false);
         std::vector<int>             active_indices;
         std::vector<Eigen::Vector3d> curr_vertices = c.vertices();
@@ -269,7 +270,7 @@ int main(int argc, char** argv) {
           }
         }
         MarchingCube                   mc(c, active_indices);
-        std::vector<mrs_lib::Triangle> curr_triangles = mc.getTriangles();
+        std::vector<mrs_lib::geometry::Triangle> curr_triangles = mc.getTriangles();
         for (unsigned int i = 0; i < curr_triangles.size(); i++) {
           triangles.push_back(curr_triangles[i]);
         }
@@ -306,12 +307,12 @@ int main(int argc, char** argv) {
     double             x2          = rand_dbl(generator);
     double             y2          = rand_dbl(generator);
     double             z2          = rand_dbl(generator);
-    Eigen::Quaterniond orientation = mrs_lib::quaternionFromEuler(x2, y2, z2);
+    Eigen::Quaterniond orientation = mrs_lib::AttitudeConverter(x2, y2, z2);
 
     double           r = (x1 - range_min) / (range_max - range_min);
     double           g = (y1 - range_min) / (range_max - range_min);
     double           b = (z1 - range_min) / (range_max - range_min);
-    mrs_lib::Ellipse el(center, orientation, major, minor);
+    mrs_lib::geometry::Ellipse el(center, orientation, major, minor);
 
     bv.addEllipse(el, r, g, b, 1.0, true);         // colored face
     bv.addEllipse(el, 0.0, 0.0, 0.0, 1.0, false);  // black outline
@@ -334,7 +335,7 @@ int main(int argc, char** argv) {
     double             x2          = rand_dbl(generator);
     double             y2          = rand_dbl(generator);
     double             z2          = rand_dbl(generator);
-    Eigen::Quaterniond orientation = mrs_lib::quaternionFromEuler(x2, y2, z2);
+    Eigen::Quaterniond orientation = mrs_lib::AttitudeConverter(x2, y2, z2);
 
     double radius = 0.3 * rand_dbl(generator);
     double height = rand_dbl(generator);
@@ -343,7 +344,7 @@ int main(int argc, char** argv) {
     double g = (y1 - range_min) / (range_max - range_min);
     double b = (z1 - range_min) / (range_max - range_min);
 
-    mrs_lib::Cylinder cyl(center, radius, height, orientation);
+    mrs_lib::geometry::Cylinder cyl(center, radius, height, orientation);
     bv.addCylinder(cyl, r, g, b, 1.0, true, true, 12);
     bv.addCylinder(cyl, 0, 0, 0, 1, false, false, 12);
     bv.publish();
@@ -374,7 +375,7 @@ int main(int argc, char** argv) {
     double g = (y1 - range_min) / (range_max - range_min);
     double b = (z1 - range_min) / (range_max - range_min);
 
-    mrs_lib::Cone cone(origin, angle, height, direction);
+    mrs_lib::geometry::Cone cone(origin, angle, height, direction);
     bv.addCone(cone, r, g, b, 1, true, true, 12);
     bv.addCone(cone, 0, 0, 0, 1, false, false, 12);
     bv.publish();
@@ -401,7 +402,7 @@ int main(int argc, char** argv) {
     double            y3 = rand_dbl(generator);
     double            z3 = rand_dbl(generator);
     Eigen::Vector3d   point3(x3, y3, z3);
-    mrs_lib::Triangle tri(point1, point2, point3);
+    mrs_lib::geometry::Triangle tri(point1, point2, point3);
 
     double          rx1 = rand_dbl(generator);
     double          ry1 = rand_dbl(generator);
@@ -411,7 +412,7 @@ int main(int argc, char** argv) {
     double          ry2 = rand_dbl(generator);
     double          rz2 = rand_dbl(generator);
     Eigen::Vector3d ray_point2(rx2, ry2, rz2);
-    mrs_lib::Ray    ray = mrs_lib::Ray::twopointCast(ray_point1, ray_point2);
+    mrs_lib::geometry::Ray    ray = mrs_lib::geometry::Ray::twopointCast(ray_point1, ray_point2);
     bv.addRay(ray, 1.0, 0.5, 0.0, 1.0);
 
     if (tri.intersectionRay(ray) == boost::none) {

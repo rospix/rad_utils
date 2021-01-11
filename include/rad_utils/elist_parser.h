@@ -4,7 +4,7 @@
 #include <vector>
 #include <memory>
 
-namespace radiation_utils
+namespace rad_utils
 {
 
 namespace elist_parser

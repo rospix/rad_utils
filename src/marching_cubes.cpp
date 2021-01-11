@@ -1,4 +1,4 @@
-#include <radiation_utils/marching_cubes.h>
+#include <rad_utils/marching_cubes.h>
 #include <iostream>
 
 MarchingCube::MarchingCube() {

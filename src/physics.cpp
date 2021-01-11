@@ -3,7 +3,7 @@
 
 #include <ros/console.h>
 #include <ros/package.h>
-#include <radiation_utils/physics.h>
+#include <rad_utils/physics.h>
 #include <iostream>
 
 /* loadNistTable() //{ */
@@ -14,7 +14,7 @@ Table loadNistTable(std::string material) {
   std::stringstream ss;
 
   // open the CSV with data
-  std::string package_path = ros::package::getPath("radiation_utils");
+  std::string package_path = ros::package::getPath("rad_utils");
   ss << package_path.c_str() << "/nist/" << material.c_str() << ".csv";
   std::ifstream nist_file;
   nist_file.open(ss.str().c_str());

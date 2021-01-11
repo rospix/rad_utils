@@ -1,7 +1,7 @@
 #include <mrs_lib/geometry/shapes.h>
 #include <mrs_lib/batch_visualizer.h>
 #include <mrs_lib/attitude_converter.h>
-#include <radiation_utils/marching_cubes.h>
+#include <rad_utils/marching_cubes.h>
 
 #include <random>
 
@@ -14,7 +14,7 @@ std::uniform_real_distribution<double> rand_percent(0, 1);
 
 int main(int argc, char** argv) {
 
-  ros::init(argc, argv, "radiation_utils_test");
+  ros::init(argc, argv, "rad_utils_test");
   ros::NodeHandle nh = ros::NodeHandle("~");
 
   ROS_INFO("[%s]: Test started!", ros::this_node::getName().c_str());

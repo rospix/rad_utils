@@ -1,4 +1,4 @@
-#include <radiation_utils/gridmap.h>
+#include <rad_utils/gridmap.h>
 #include <algorithm>
 
 namespace mapping

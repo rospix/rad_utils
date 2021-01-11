@@ -1,9 +1,9 @@
-#include <radiation_utils/elist_parser.h>
+#include <rad_utils/elist_parser.h>
 #include <stdio.h>
 #include <fstream>
 #include <optional>
 
-namespace radiation_utils
+namespace rad_utils
 {
 
 namespace elist_parser
@@ -51,4 +51,4 @@ std::optional<std::shared_ptr<std::vector<Event>>> parseEventList(const std::str
 
 }  // namespace elist_parser
 
-}  // namespace radiation_utils
+}  // namespace rad_utils

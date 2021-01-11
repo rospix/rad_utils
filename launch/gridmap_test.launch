@@ -1,6 +1,6 @@
 <launch>
   
-  <node name="gridmap_test" pkg="radiation_utils" type="gridmap_test" output="screen" />
-  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find radiation_utils)/rviz/gridmap_test.rviz" />
+  <node name="gridmap_test" pkg="rad_utils" type="gridmap_test" output="screen" />
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find rad_utils)/rviz/gridmap_test.rviz" />
 
 </launch>

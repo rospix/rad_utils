@@ -1,6 +1,6 @@
 <package format="2">
 
-  <name>radiation_utils</name>
+  <name>rad_utils</name>
   <version>0.0.1</version>
   <description>Physics calculations for radiation source simulations and localization. Geometry and graphics has been merged into mrs_lib</description>
   <maintainer email="stibipet@fel.cvut.cz">Petr Štibinger</maintainer>

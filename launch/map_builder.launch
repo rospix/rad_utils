@@ -2,7 +2,7 @@
   <arg name="uav" default="uav46" />
 
   <node name="map_builder" pkg="map_builder" type="map_builder" output="screen">
-    <rosparam file="$(find radiation_utils)/config/map_builder.yaml" command="load" />
+    <rosparam file="$(find rad_utils)/config/map_builder.yaml" command="load" />
 
     <!-- use for simulations -->
     <remap from="~data_in" to="/$(arg uav)/compton_camera/cluster_list" />

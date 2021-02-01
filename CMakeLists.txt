@@ -20,7 +20,7 @@ catkin_package(
   INCLUDE_DIRS include
   DEPENDS Eigen
   CATKIN_DEPENDS roscpp roslib std_msgs rad_msgs mrs_lib
-  LIBRARIES physics marching_cubes
+  LIBRARIES physics marching_cubes RadUtilsGeometry
 )
 
 include_directories(
@@ -69,6 +69,12 @@ target_link_libraries(map_builder
 
 add_library(gridmap src/gridmap.cpp)
 target_link_libraries(gridmap
+  ${catkin_LIBRARIES}
+  ${Eigen_LIBRARIES}
+)
+
+add_library(RadUtilsGeometry src/geometry.cpp)
+target_link_libraries(RadUtilsGeometry
   ${catkin_LIBRARIES}
   ${Eigen_LIBRARIES}
 )

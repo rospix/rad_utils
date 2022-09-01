@@ -1,14 +1,26 @@
 <launch>
-  <arg name="uav" default="uav46" />
 
-  <node name="map_builder" pkg="map_builder" type="map_builder" output="screen">
-    <rosparam file="$(find rad_utils)/config/map_builder.yaml" command="load" />
+  <arg name="UAV_NAME" default="$(optenv UAV_NAME)" />
 
-    <!-- use for simulations -->
-    <remap from="~data_in" to="/$(arg uav)/compton_camera/cluster_list" />
-    <remap from="~odom_in" to="/$(arg uav)/odometry/odom_main" />
-    <remap from="~map_normalized_out" to="/$(arg uav)/map_builder/map/normalized" />
+  <arg name="custom_config" default="" />
 
-  </node>
+  <group ns="$(arg UAV_NAME)">
+
+    <node name="map_builder" pkg="rad_utils" type="map_builder" output="screen">
+
+      <rosparam file="$(find rad_utils)/config/map_builder.yaml" command="load" />
+
+      <rosparam if="$(eval not arg('custom_config') == '')" file="$(arg custom_config)" />
+
+      <param name="uav_name" value="$(arg UAV_NAME)" />
+
+      <!-- use for simulations -->
+      <remap from="~data_in" to="rospix3/left/cluster_list" />
+      <remap from="~odom_in" to="odometry/odom_main" />
+      <remap from="~map_normalized_out" to="map_builder/map/normalized" />
+
+    </node>
+
+  </group>
 
 </launch>

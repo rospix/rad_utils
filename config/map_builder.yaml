@@ -1,6 +1,6 @@
-height: 11.0 # [m] Y-axis
-width:  8.0 # [m] X-axis
-resolution: 0.6
+height: 80.0 # [m] Y-axis
+width:  60.0 # [m] X-axis
+resolution: 1.0
 origin:
-  x: -7.0
-  y: -3.5
+  x: -30
+  y: -30

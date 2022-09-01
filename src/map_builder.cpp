@@ -21,6 +21,8 @@ double yaw = 0;
 double map_origin_x = 0;
 double map_origin_y = 0;
 
+std::string uav_name;
+
 // UAV position in map grid
 int gridx = 0;
 int gridy = 0;
@@ -122,6 +124,7 @@ int main(int argc, char** argv) {
   nh_.getParam("resolution", resolution);
   nh_.getParam("origin/x", map_origin_x);
   nh_.getParam("origin/y", map_origin_y);
+  nh_.getParam("uav_name", uav_name);
 
   // fill the heatmap with zero values
   map_normalized                        = nav_msgs::OccupancyGrid();
@@ -130,7 +133,7 @@ int main(int argc, char** argv) {
   map_normalized.info.resolution        = resolution;
   map_normalized.info.origin.position.x = map_origin_x;
   map_normalized.info.origin.position.y = map_origin_y;
-  map_normalized.header.frame_id        = "uav46/local_origin";
+  map_normalized.header.frame_id        = uav_name + "/gps_origin";
 
   rows = (int)(height / resolution);
   cols = (int)(width / resolution);
